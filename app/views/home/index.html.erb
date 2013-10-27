@@ -1,0 +1,55 @@
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="hero-unit">
+  <div class="container">
+    <h1>Welome</h1>
+    <p>This is BIP's first iteration of the proposed public interface tool. This prototype compares users' mite treatment choices with those in the BIP data set to offer insight into what they may expect for results.</p>
+    </div>
+    </div>
+    <div class="container">
+    <h4>Directions:</h4>
+    <p>Select a series of treatments and months applied in your treatment schedule to compare choices with those of our respondants.</p>
+    <p>&nbsp</p>
+
+  <%= form_tag "/test" do %>
+  
+      <!-- Expiry-->
+    <div class="control-group">
+      <label class="control-label">Treatment Schedule</label>
+      <div class="controls">
+        <%= select_tag "treatments_1", options_from_collection_for_select(@treatments, "name", "name"),  {:class => "span3", :id =>"treatment_1", :prompt => "Treatment 1"} %>
+        <%= select_tag "months_1", options_from_collection_for_select(@months, "name", "name"),  {:class => "span3", :id =>"month_1", :prompt => "Month"} %>
+      </div>
+        <div class="controls">
+        <%= select_tag "treatments_2", options_from_collection_for_select(@treatments, "name", "name"),  {:class => "span3", :id =>"treatment_2", :prompt => "Treatment 2"} %>
+        <%= select_tag "months_2", options_from_collection_for_select(@months, "name", "name"),  {:class => "span3", :id =>"month_2", :prompt => "Month"} %>
+      </div>
+        <div class="controls">
+        <%= select_tag "treatments_3", options_from_collection_for_select(@treatments, "name", "name"),  {:class => "span3", :id =>"treatment_3", :prompt => "Treatment 3"} %>
+        <%= select_tag "months_3", options_from_collection_for_select(@months, "name", "name"),  {:class => "span3", :id =>"month_3", :prompt => "Month"} %>
+      </div>
+        <div class="controls">
+        <%= select_tag "treatments_4", options_from_collection_for_select(@treatments, "name", "name"),  {:class => "span3", :id =>"treatment_4", :prompt => "Treatment 4"} %>
+        <%= select_tag "months_4", options_from_collection_for_select(@months, "name", "name"),  {:class => "span3", :id =>"month_4", :prompt => "Month"} %>
+      </div>
+        <div class="controls">
+        <%= select_tag "treatments_5", options_from_collection_for_select(@treatments, "name", "name"),  {:class => "span3", :id =>"treatment_5", :prompt => "Treatment 5"} %>
+        <%= select_tag "months_5", options_from_collection_for_select(@months, "name", "name"),  {:class => "span3", :id =>"month_5", :prompt => "Month"} %>
+      </div>
+        <div class="controls">
+        <%= select_tag "treatments_6", options_from_collection_for_select(@treatments, "name", "name"),  {:class => "span3", :id =>"treatment_6", :prompt => "Treatment 6"} %>
+        <%= select_tag "months_6", options_from_collection_for_select(@months, "name", "name"),  {:class => "span3", :id =>"month_6", :prompt => "Month"} %>
+      </div>
+    </div>
+      
+    
+    <!-- Submit -->
+    <div class="control-group">
+      <div class="controls">
+        <div class="pull-right">
+          <%= submit_tag "Next >", {:class => "pull-right btn btn-large btn-success"} %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>
