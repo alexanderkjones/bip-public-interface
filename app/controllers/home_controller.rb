@@ -14,7 +14,7 @@ class HomeController < ApplicationController
     end
     
     
-    @testing = @neo.execute_query("MATCH (Losses) <- [:REPORTED] - (Users) - [:TREATED_WITH] - (Treatments) - [:TREATED_IN] -> Months WHERE Months == April && Treatment == Apilife Var || Months == May && Treatments == ApiGuard RETURN AVG(Losses)")
+    @testing = @neo.execute_query("START n=node* MATCH (Losses) <- [:REPORTED] - (Users) - [:TREATED_WITH] - (Treatments) - [:TREATED_IN] -> Months WHERE Months == April && Treatment == Apilife Var || Months == May && Treatments == ApiGuard RETURN AVG(Losses)")
 
     puts "==TESTING=="
     puts @testing
