@@ -11,7 +11,14 @@ class HomeController < ApplicationController
     @treatments = []
     @the_treatments.each do |t|
       @treatments.push(Neography::Node.load(t.first["self"]))
-    end    
+    end
+    
+    
+    @testing = @neo.execute_query("MATCH (Losses) <- [:REPORTED] - (Users) - [:TREATED_WITH] - (Treatments) - [:TREATED_IN] -> Months WHERE Months == April && Treatment == Apilife Var || Months == May && Treatments == ApiGuard RETURN AVG(Losses)")
+
+    puts "==TESTING=="
+    puts @testing
+    puts "==========="    
   end
   
   def results
