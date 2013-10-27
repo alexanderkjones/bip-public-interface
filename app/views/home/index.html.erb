@@ -40,7 +40,10 @@
         <%= select_tag "months_6", options_from_collection_for_select(@months, "name", "name"),  {:class => "span3", :id =>"month_6", :prompt => "Month"} %>
       </div>
     </div>
-      
+
+
+
+<%= @neo.execute_query("MATCH (Losses) <- [:REPORTED] - (Users) - [:TREATED_WITH] - (Treatments) - [:TREATED_IN] -> Months WHERE Months == April && Treatment == Apilife Var || Months == May && Treatments == ApiGuard RETURN AVG(Losses)") %>
     
     <!-- Submit -->
     <div class="control-group">
