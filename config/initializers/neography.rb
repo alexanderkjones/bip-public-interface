@@ -1,7 +1,7 @@
 Neography.configure do |config|
   config.protocol         = "http://"
-  config.server           = "80bd44ba6:e73489f92@6f3117f12.hosted.neo4j.org"
-  config.port             = 7570
+  config.server           = "localhost" #"80bd44ba6:e73489f92@6f3117f12.hosted.neo4j.org"
+  config.port             = 7474
   config.directory        = ""
   config.cypher_path      = "/cypher"
 #  config.gremlin_path     = "/ext/GremlinPlugin/graphdb/execute_script"
