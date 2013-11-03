@@ -113,7 +113,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bootstrap-sass (= 2.3.2.2)
+  bootstrap-sass
   coffee-rails (~> 3.2.1)
   jquery-rails
   neography

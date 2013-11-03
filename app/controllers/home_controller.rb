@@ -7,14 +7,48 @@ class HomeController < ApplicationController
       @months.push(Neography::Node.load(m.first["self"]))
     end
 
-    @the_treatments = @neo.execute_query("START n=node:Treatments('*:*') RETURN n")["data"]    
-    @treatments = []
-    @the_treatments.each do |t|
-      @treatments.push(Neography::Node.load(t.first["self"]))
+    @the_products = @neo.execute_query("START n=node:Products('*:*') RETURN n")["data"]    
+    @products = []
+    @the_products.each do |t|
+      @products.push(Neography::Node.load(t.first["self"]))
     end
+
+#    @testing = @neo.execute_query(query)
+    
+#    puts @testing
+    @the_users = @neo.execute_query("START n=node:Users('*:*') RETURN n")["data"]
+    
+    @users = []
+    @the_users.each do |u|
+      @users.push(Neography::Node.load(u.first["self"]))
+    end
+    
+    puts @users
   end
   
   def results
+    @neo = Neography::Rest.new
+    puts "==RESULTS=="
+    puts params.to_xml
+    puts "==================================="
+
+#    query = "START root=node(1) return root"
+    
+    query = "START user=node:Users('*:*') MATCH (hiveloss) <- [r1:reported] -> (user) - " +
+    "[r2:used] -> (schedule) - [r3:applied] -> (treatment) - [r4:date_applied] -> (month) " +
+    "WHERE treatment.name='Apivar' " +
+    "RETURN hiveloss"
+    
+    @loss = @neo.execute_query(query)
+    
+    puts @loss
+
+    respond_to do |format|
+      format.json { render json: {}, status: :ok }
+    end
+  end
+  
+  def results_old
     @neo = Neography::Rest.new
     puts "==RESULTS=="
     puts params.to_xml
