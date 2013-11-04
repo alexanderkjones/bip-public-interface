@@ -1,0 +1,75 @@
+<div class="hero-unit">
+  <div class="container">
+    <b>Query 1:</b><br/>
+    START apivar=node(10), april=node:Months('name:April'), june=node(14), august=node(15)<br/>
+    MATCH (schedule) - [:APPLIED] -> (t1) - [:PRODUCT_USED] -> (apivar),<br/>
+    (schedule) - [:APPLIED] -> (t2) - [:PRODUCT_USED] -> (apivar),<br/>
+    (schedule) - [:APPLIED] -> (t3) - [:PRODUCT_USED] -> (apivar),<br/>
+    (t1) - [:DATE_APPLIED] -> (april),<br/>
+    (t2) - [:DATE_APPLIED] -> (june),<br/>
+    (t3) - [:DATE_APPLIED] -> (august)<br/>
+    WHERE (schedule.num_products=1) AND (schedule.num_treatments=3)<br/>
+    WITH DISTINCT schedule<br/>
+    MATCH (hiveloss) <- [:REPORTED] - (user) - [:USED] -> (schedule)<br/>
+    RETURN user as user<br/><br/>
+    <b>Query 1 Results:</b></br>
+    <table>
+      <tr>
+        <th>Name</th>
+      </tr>
+      <% @query1_results.each do |q| %>
+        <tr>
+          <td><%= q %></td>
+        </tr>
+      <% end %>
+    </table><br/>
+    
+    <b>Query 2:</b><br/>
+    START apivar=node(10)<br/>
+    MATCH (schedule) - [:APPLIED] -> (t) - [:PRODUCT_USED] -> (apivar)<br/>
+    WHERE (schedule.num_products=1)<br/>
+    WITH DISTINCT schedule<br/>
+    MATCH (hiveloss) <- [:REPORTED] - (user) - [:USED] -> (schedule)<br/>
+    RETURN schedule as schedule, user as user, hiveloss as hive_loss<br/><br/>
+    <b>Query 2 Results:</b><br/>
+    <table>
+      <tr>
+        <th>No. of Products</th>
+        <th>No. of Treatments</th>
+        <th>Name</th>
+      </tr>
+      <% @query2_results.each do |q| %>
+        <tr>
+          <td><%= q["num_products"] %></td>
+          <td><%= q["num_treatments"] %></td>
+          <td><%= q["name"] %></td>
+        </tr>
+      <% end %>
+    </table><br/>
+    
+    <b>Query 3:</b><br/>
+    START apivar=node(10), april=node(13), june=node(14), august=node(15)<br/>
+    MATCH (schedule) - [:APPLIED] -> (t1) - [:DATE_APPLIED] -> (april),<br/>
+    (schedule) - [:APPLIED] -> (t2) - [:DATE_APPLIED] -> (june),<br/>
+    (schedule) - [:APPLIED] -> (t3) - [:DATE_APPLIED] -> (august)<br/>
+    WHERE (schedule.num_treatments=3)<br/>
+    WITH DISTINCT schedule<br/>
+    MATCH (hiveloss) <- [:REPORTED] - (user) - [:USED] -> (schedule)<br/>
+    RETURN schedule as schedule, user as user, hiveloss as hive_loss<br/><br/>    
+    <b>Query 3 Results:</b><br/>
+    <table>
+      <tr>
+        <th>No. of Products</th>
+        <th>No. of Treatments</th>
+        <th>Name</th>
+      </tr>
+      <% @query3_results.each do |q| %>
+        <tr>
+          <td><%= q["num_products"] %></td>
+          <td><%= q["num_treatments"] %></td>
+          <td><%= q["name"] %></td>
+        </tr>
+      <% end %>
+    </table><br/>    
+  </div>
+</div>

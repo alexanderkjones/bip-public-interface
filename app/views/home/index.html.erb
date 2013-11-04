@@ -2,15 +2,20 @@
   $(document).ready(function(){
     $('#treatment_plan').submit(function(e){
       e.preventDefault();
-      var products = $("select#products");
+      var products = $("select#product");
       var months = $("select#month");
 
-      var plans = {}
+      var temp_plan = {};
+      var plans = [];
       
       for(var i=0;i < products.length;i++)
       {
-        plans[$(products[i]).val()] = $(months[i]).val()
+        temp_plan[$(products[i]).val()] = $(months[i]).val();
+        plans.push(temp_plan);
+        temp_plan = {};
       }
+      
+      console.log(plans);
       
       $.post("/test", {plans: plans}, function(data){
         console.log(data);
@@ -32,6 +37,8 @@
     <h4>Directions:</h4>
     <p>Select a series of treatments and months applied in your treatment schedule to compare choices with those of our respondants.</p>
     <p>&nbsp</p>
+    
+    <p><%= link_to "Look at some queries!", queries_path %></p>
 
   <%= form_tag "/test", {:id => "treatment_plan"} do %>
   

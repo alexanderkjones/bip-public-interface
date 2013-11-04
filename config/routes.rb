@@ -1,5 +1,6 @@
 BipPrototypeNeography::Application.routes.draw do
   match 'test' => 'home#results'
+  match 'queries' => 'home#query', :as => 'queries'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
