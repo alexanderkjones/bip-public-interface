@@ -1,6 +1,6 @@
 Neography.configure do |config|
   config.protocol         = "http://"
-  config.server           = "80bd44ba6:e73489f92@6f3117f12.hosted.neo4j.org:7570" #"localhost"
+  config.server           = "80bd44ba6:e73489f92@6f3117f12.hosted.neo4j.org" #"localhost"
   config.port             = 7570 #7474
   config.directory        = ""
   config.cypher_path      = "/cypher"
