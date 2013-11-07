@@ -12,49 +12,60 @@ class HomeController < ApplicationController
     @the_products.each do |t|
       @products.push(Neography::Node.load(t.first["self"]))
     end
-
-#    @testing = @neo.execute_query(query)
-    
-#    puts @testing
-    @the_users = @neo.execute_query("START n=node:Users('*:*') RETURN n")["data"]
-    
-    query = "START apivar=node(10), april=node:Months('name:April'), june=node(14), august=node(15) " +
-            "MATCH (schedule) - [:APPLIED] -> (t1) - [:PRODUCT_USED] -> (apivar), " +
-            "(schedule) - [:APPLIED] -> (t2) - [:PRODUCT_USED] -> (apivar), " +
-            "(schedule) - [:APPLIED] -> (t3) - [:PRODUCT_USED] -> (apivar), " +
-            "(t1) - [:DATE_APPLIED] -> (april), " +
-            "(t2) - [:DATE_APPLIED] -> (june), " +
-            "(t3) - [:DATE_APPLIED] -> (august) " +
-            "WHERE (schedule.num_products=1) AND (schedule.num_treatments=3) " +
-            "WITH DISTINCT schedule " +
-            "MATCH (hiveloss) <- [:REPORTED] - (user) - [:USED] -> (schedule) " +
-            "RETURN user as user, hiveloss as hive_loss"
-    
-#    @hiveloss = @neo.execute_query(query)
-
-    # @users = []
-    # @the_users.each do |u|
-      # @users.push(Neography::Node.load(u.first["self"]))
-    # end
-    
-#    puts @hiveloss
   end
-  
+
   def results
     @neo = Neography::Rest.new
-    puts "==RESULTS=="
-    puts params.to_xml
-    puts params[:plans][0].nil?
-    puts "==================================="
 
-    
-    
-    #@loss = @neo.execute_query(query)
-    
-    #puts @loss
+    products = []
+    months = []
+    params[:plans].each do |k, v|
+      v.each do |l, w|
+        if l != "" && w != ""
+          products.push(l)
+          months.push(w)
+        end
+      end
+    end
 
+    query_start = "START "
+    (0..products.length-1).each do |t|
+      unless query_start.include?("#{products[t].downcase}=node:Products('name:#{products[t]}'), ")
+        query_start += "#{products[t].downcase}=node:Products('name:#{products[t]}'), "
+      end
+      
+      unless query_start.include?("#{months[t].downcase}=node:Months('name:#{months[t]}'), ")
+        query_start += "#{months[t].downcase}=node:Months('name:#{months[t]}'), "
+      end
+    end
+    query_start = query_start[0..-3]
+
+    query_match = "MATCH "
+    (0..products.length-1).each do |t|
+      unless query_match.include?("(schedule) - [:APPLIED] -> (t#{t+1}) - [:PRODUCT_USED] -> (#{products[t].downcase}), ")
+        query_match += "(schedule) - [:APPLIED] -> (t#{t+1}) - [:PRODUCT_USED] -> (#{products[t].downcase}), "
+      end
+    end
+    
+    (0..products.length-1).each do |t|
+      unless query_match.include?("(t#{t+1}) - [:DATE_APPLIED] -> (#{months[t].downcase}), ")
+        query_match += "(t#{t+1}) - [:DATE_APPLIED] -> (#{months[t].downcase}), "
+      end
+    end
+    query_match = query_match[0..-3]
+    
+    query_where = "WHERE (schedule.num_products = #{products.uniq.count}) AND (schedule.num_treatments = #{products.count}) "
+    query_with_distinct = "WITH DISTINCT schedule "
+    query_match2 = "MATCH (hiveloss) <- [:REPORTED] - (user) - [:USED] -> (schedule) "
+    query_return = "RETURN user as user, hiveloss as hive_loss"
+
+    query = query_start + query_match + query_where + query_with_distinct + query_match2 + query_return
+    
+    @loss = @neo.execute_query(query)
+    
     respond_to do |format|
-      format.json { render json: {}, status: :ok }
+      format.js { render partial: "results"}
+#      format.json { render json: {}, status: :ok }
     end
   end
   
@@ -111,49 +122,5 @@ class HomeController < ApplicationController
     end
     
     puts @query3_results
-  end
-  
-  def results_old
-    @neo = Neography::Rest.new
-    puts "==RESULTS=="
-    puts params.to_xml
-    puts params[:treatment_3].nil?
-    puts params[:months_1].nil?
-    puts params[:treatments_1].nil?
-    puts "==========="
-
-    unless params[:months_1].nil? || params[:treatments_1].nil?
-      query = "START user = node:Users('*:*') MATCH (h) <- [r1:reported] -> (user) - [r2:treated_with] -> (t) - [r3:treated_in] -> (m) WHERE t.name='" +
-            params[:treatments_1] + "' AND m.name='" + params[:months_1] + "' RETURN h"
-      @results = @neo.execute_query(query)["data"]
-      puts "===================================="
-      puts @results.first
-      puts "===================================="
-      puts @results
-      puts "====================================="
-    end
-
-#    @testing = @neo.execute_query("START user = node:Users('*:*') MATCH (h) <- [r1:reported] -> (user) - [r2:treated_with] -> (t) - [r3:treated_in] -> (m) RETURN h, r1, user, r2, t, r3, m")["data"]
-#    @testing = @neo.execute_query("START user = node:Users('*:*') MATCH (h) <- [r1:reported] -> (user) - [r2:treated_with] -> (t) - [r3:treated_in] -> (m) RETURN h")["data"]
-    query = "START user = node:Users('*:*') MATCH (h) <- [r1:reported] -> (user) - [r2:treated_with] -> (t) - [r3:treated_in] -> (m) WHERE t.name='" +
-            params[:treatments_1] + "' AND m.name='" + params[:months_1] + "' RETURN h"
-    @testing = @neo.execute_query(query)["data"]
-    
-    @node_urls = Set.new
-    @testing.each do |t|
-      @node_urls.add(t.first["self"])
-    end
-    
-    puts "==STILL RESULTS=="
-    @nodes = []
-    @node_urls.each do |n|
-      @nodes.push(Neography::Node.load(n).value.to_f)
-    end
-
-    @hive_loss = @nodes.inject(0.0) { |sum, el| sum + el }.to_f / @nodes.size
-    puts @hive_loss
-    puts "================="
-
-
   end
 end
