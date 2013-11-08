@@ -10,7 +10,7 @@ File: css/style.css
 Last edited: August 17, 2012, 8:34 pm
 */
 
-/* Font face */
+/* Font face 
 @font-face {
     font-family: 'DistantGalaxyRegular';
     src: url('fonts/DISTGRG_-webfont.eot');
@@ -21,7 +21,7 @@ Last edited: August 17, 2012, 8:34 pm
     font-weight: normal;
     font-style: normal;
 
-}
+}*/
 @font-face {
     font-family: 'LeagueGothicRegular';
     src: url('fonts/League_Gothic-webfont.eot');
