@@ -8,7 +8,12 @@
       var count = 0;
       for(var i=0;i < products.length;i++)
       {
-        if($(products[i]).val() != "")
+        if(($(products[i]).val() == "" && $(months[i]).val() != "") || ($(products[i]).val() != "" && $(months[i]).val() == ""))
+        {
+          count = 0;
+          break;
+        }
+        else if($(products[i]).val() != "" && $(months[i]).val() != "")
         {
           count++;
         }
@@ -16,49 +21,33 @@
       
       if(count > 0)
       {
-        count = 0;
-        for(var i=0;i < months.length;i++)
+        var temp_plan = {};
+        var plans = [];
+        
+        console.log(products)
+        console.log(months)
+        
+        for(var i=0;i < products.length;i++)
         {
-          if($(months[i]).val() != "")
-          {
-            count ++;
-          }
+          temp_plan[$(products[i]).val()] = $(months[i]).val();
+          plans.push(temp_plan);
+          temp_plan = {};
         }
-
-        if(count > 0)
-        {
-          var temp_plan = {};
-          var plans = [];
-          
-          console.log(products)
-          console.log(months)
-          
-          for(var i=0;i < products.length;i++)
-          {
-            temp_plan[$(products[i]).val()] = $(months[i]).val();
-            plans.push(temp_plan);
-            temp_plan = {};
-          }
-          
-          console.log(plans);
-          
-          var good = false
-          
-          
-          $.post("/results", {plans: plans}, function(data){
-            console.log(data);
-          });
-          
-          return false;
-        }
-        else
-        {
-          alert("Must have at least one combo.");
-        }
+        
+        console.log(plans);
+        
+        var good = false
+        
+        
+        $.post("/results", {plans: plans}, function(data){
+          console.log(data);
+        });
+        
+        return false;
       }
       else
       {
-        alert("Must have at least one combo.");
+        alert("Invalid input.");
       }
     });
   });
