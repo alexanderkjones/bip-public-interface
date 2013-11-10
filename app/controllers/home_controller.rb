@@ -57,11 +57,22 @@ class HomeController < ApplicationController
     query_where = "WHERE (schedule.num_products = #{products.uniq.count}) AND (schedule.num_treatments = #{products.count}) "
     query_with_distinct = "WITH DISTINCT schedule "
     query_match2 = "MATCH (hiveloss) <- [:REPORTED] - (user) - [:USED] -> (schedule) "
-    query_return = "RETURN user as user, hiveloss as hive_loss"
+    query_return = "RETURN COUNT(user) as num_users, SUM(hiveloss.value) as sum_loss"
 
     query = query_start + query_match + query_where + query_with_distinct + query_match2 + query_return
     
-    @loss = @neo.execute_query(query)
+    puts query
+    
+    @loss = @neo.execute_query(query)["data"]
+    
+    @loss = JSON.parse(@loss.first.to_json)
+    
+    ratio = (@loss[1].to_f / @loss[0].to_f).to_f * 0.01
+    
+    @ci_high = (ratio + (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f)) * 100
+    @ci_low = (ratio - (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f)) * 100
+    
+    @confidence_interval = ((@ci_high + @ci_low) / 2.0).to_i
     
     respond_to do |format|
       format.js { render partial: "results"}

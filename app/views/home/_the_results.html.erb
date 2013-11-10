@@ -1,8 +1,78 @@
-<div class="hero-unit">
-  <div class="container">
-    <h1>Results</h1>
-  </div>
-</div>
 <div class="container">
-  <%= @loss %>
+
+  <h4>Directions:</h4>
+  <p>Below we have listed the expected outcomes of your treatment strategy based on historical data from or survey 
+    respondants. See how you compare agains the National Average for hive loss as well as other treatment strategies 
+    that may work better in your area.</p>
+    
+  <div class="span8">
+    <h4>Estimated Treatment Outcome Vs. National Average:</h4>
+    <ul class="unstyled">
+      <li>Expected Hive Loss <span class="pull-right strong"><%= @loss[1] / @loss[0] %>%</span>
+        <div class="progress progress-important">
+          <div class="bar" style="width: <%= @loss[1] / @loss[0] %>%;"></div>
+        </div>
+      </li>
+      <li>95% Confidence Interval <span class="pull-right strong"><%= @confidence_interval %>%</span>
+        <div class="progress progress-important">
+          <div class="bar" style="width: <%= @confidence_interval %>%;"></div>
+        </div>
+      </li>
+      <li>National Hive Loss Average<span class="pull-right strong">30%</span>
+        <div class="progress progress-success">
+          <div class="bar" style="width: 30%;"></div>
+        </div>
+      </li>
+    </ul>
+  
+    <div>&nbsp</div>
+  
+    <h4>Expected Results Using Similar Treatments at Different Times Throughout The Season:</h4>
+    <ul class="unstyled">
+      <li>Apivar: June, July, August<span class="pull-right strong">25%</span>
+        <div class="progress progress-success">
+          <div class="bar" style="width: 25%;"></div>
+        </div>
+      </li>
+      <li>Apivar: April, June, October<span class="pull-right strong">30%</span>
+        <div class="progress progress-important">
+          <div class="bar" style="width: 30%;"></div>
+        </div>
+      </li>
+      <li>Apivar: September<span class="pull-right strong">32%</span>
+        <div class="progress progress-important">
+          <div class="bar" style="width: 32%;"></div>
+        </div>
+      </li>
+    </ul>
+  
+    <div>&nbsp</div>
+  
+    <h4>Highest Performing Treatment Strategies Overall:</h4>
+    <ul class="unstyled">
+      <li>MiteAway: April, July, August<span class="pull-right strong">25%</span>
+        <div class="progress progress-success">
+          <div class="bar" style="width: 25%;"></div>
+        </div>
+      </li>
+      <li>ApiGuard: April, May, September<span class="pull-right strong">30%</span>
+        <div class="progress progress-important">
+          <div class="bar" style="width: 30%;"></div>
+        </div>
+      </li>
+      <li>Apivar: June, October<span class="pull-right strong">40%</span>
+        <div class="progress progress-important">
+          <div class="bar" style="width: 40%;"></div>
+        </div>
+      </li>
+    </ul>
+    
+    <div>&nbsp</div>
+    
+    <% @loss.each do |l| %>
+      <b>ONE THING:</b><br/>
+      <p><%= l %></p>
+    <% end %>
+  </div>
+
 </div>

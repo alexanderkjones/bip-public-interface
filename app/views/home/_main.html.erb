@@ -5,23 +5,61 @@
       var products = $("select#product");
       var months = $("select#month");
 
-      var temp_plan = {};
-      var plans = [];
-      
+      var count = 0;
       for(var i=0;i < products.length;i++)
       {
-        temp_plan[$(products[i]).val()] = $(months[i]).val();
-        plans.push(temp_plan);
-        temp_plan = {};
+        if($(products[i]).val() != "")
+        {
+          count++;
+        }
       }
       
-      console.log(plans);
-      
-      $.post("/results", {plans: plans}, function(data){
-        console.log(data);
-      });
-      
-      return false;
+      if(count > 0)
+      {
+        count = 0;
+        for(var i=0;i < months.length;i++)
+        {
+          if($(months[i]).val() != "")
+          {
+            count ++;
+          }
+        }
+
+        if(count > 0)
+        {
+          var temp_plan = {};
+          var plans = [];
+          
+          console.log(products)
+          console.log(months)
+          
+          for(var i=0;i < products.length;i++)
+          {
+            temp_plan[$(products[i]).val()] = $(months[i]).val();
+            plans.push(temp_plan);
+            temp_plan = {};
+          }
+          
+          console.log(plans);
+          
+          var good = false
+          
+          
+          $.post("/results", {plans: plans}, function(data){
+            console.log(data);
+          });
+          
+          return false;
+        }
+        else
+        {
+          alert("Must have at least one combo.");
+        }
+      }
+      else
+      {
+        alert("Must have at least one combo.");
+      }
     });
   });
 </script>
