@@ -66,10 +66,10 @@ class HomeController < ApplicationController
     @loss = JSON.parse(@loss.first.to_json)
     
     unless @loss[0] == 0 || @loss[1] == 0
-      ratio = (@loss[1].to_f / @loss[0].to_f).to_f
+      ratio = (@loss[1].to_f / @loss[0].to_f).to_f * 0.01
       
-      @ci_high = (ratio + (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f))
-      @ci_low = (ratio - (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f))
+      @ci_high = (ratio + (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f)) * 100
+      @ci_low = (ratio - (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f)) * 100
       
       @confidence_interval = ((@ci_high - @ci_low) / 2.0).round(2)
       
@@ -115,10 +115,10 @@ class HomeController < ApplicationController
 
 
     unless @products_only[0] == 0 || @products_only[1] == 0
-      ratio = (@products_only[1].to_f / @products_only[0].to_f).to_f
+      ratio = (@products_only[1].to_f / @products_only[0].to_f).to_f * 0.01
       
-      @po_ci_high = (ratio + (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @products_only[0].to_f))
-      @po_ci_low = (ratio - (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @products_only[0].to_f))
+      @po_ci_high = (ratio + (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @products_only[0].to_f)) * 100
+      @po_ci_low = (ratio - (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @products_only[0].to_f)) * 100
       
       @po_confidence_interval = ((@po_ci_high - @po_ci_low) / 2.0).round(2)
       
@@ -164,10 +164,10 @@ class HomeController < ApplicationController
     @months_only = @neo.execute_query(query)["data"].first
     
     unless @months_only[0] == 0 || @months_only[1] == 0
-      ratio = (@months_only[1].to_f / @months_only[0].to_f).to_f
+      ratio = (@months_only[1].to_f / @months_only[0].to_f).to_f * 0.01
       
-      @mo_ci_high = (ratio + (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @months_only[0].to_f))
-      @mo_ci_low = (ratio - (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @months_only[0].to_f))
+      @mo_ci_high = (ratio + (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @months_only[0].to_f)) * 100
+      @mo_ci_low = (ratio - (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @months_only[0].to_f)) * 100
       
       @mo_confidence_interval = ((@mo_ci_high - @mo_ci_low) / 2.0).round(2)
       
