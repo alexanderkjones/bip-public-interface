@@ -66,10 +66,10 @@ class HomeController < ApplicationController
     @loss = JSON.parse(@loss.first.to_json)
     
     unless @loss[0] == 0 || @loss[1] == 0
-      ratio = (@loss[1].to_f / @loss[0].to_f).to_f * 0.01
+      ratio = (@loss[1].to_f / @loss[0].to_f).to_f
       
-      @ci_high = (ratio + (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f)) * 100
-      @ci_low = (ratio - (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f)) * 100
+      @ci_high = (ratio + (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f))
+      @ci_low = (ratio - (1.96 * (Math.sqrt(ratio) * (1.0 - ratio)) / @loss[0].to_f))
       
       @confidence_interval = ((@ci_high - @ci_low) / 2.0).round(2)
       
